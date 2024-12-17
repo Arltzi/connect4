@@ -13,8 +13,4 @@ int main()
         cout << word << " ";
     }
     cout << endl;
-
-
-    int x;
-    cin >> x;
 }
