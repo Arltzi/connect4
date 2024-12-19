@@ -62,10 +62,60 @@ public:
         return false;
     };
 
-    // bool CheckWin()
-    // {
+    bool CheckWin(bool p1orp2)
+    {
+        int checked = 0;
+        char charToCheck = p1orp2 ? P1 : P2;
 
-    // };
+        // check horizontally
+        for (int row_i = 0; row_i < ROWS; row_i++)
+        {
+            for (int col_i = 0; col_i < COLUMNS; col_i++)
+            {
+                if(boardState[row_i][col_i] == charToCheck)
+                {
+                    checked ++;
+                    if(checked == 4)
+                    {
+                        return true;
+                    }
+                }
+                else
+                {
+                    checked = 0;
+                }
+            }
+
+            checked = 0;
+        }
+
+        // check vertically
+        for (int row_i = 0; row_i < ROWS; row_i++)
+        {
+            for (int col_i = 0; col_i < COLUMNS; col_i++)
+            {
+                if(boardState[col_i][row_i] == charToCheck)
+                {
+                    checked ++;
+                    if(checked == 4)
+                    {
+                        return true;
+                    }
+                }
+                else
+                {
+                    checked = 0;
+                }
+            }
+
+            checked = 0;
+        }
+
+        // check diagonally (up-right)
+
+        // check diagonally (up-left)
+
+    };
 
     void RenderBoard()
     {
@@ -90,7 +140,10 @@ public:
         }
         std::cout << "+ \n";
     };
+
 };
+
+
 
 // init board singleton pointer
 Board* Board::inst = nullptr;
