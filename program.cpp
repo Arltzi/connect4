@@ -112,12 +112,17 @@ public:
             checked = 0;
         }
 
+        // two different approaches to check for a win
         // check diagonally (down-right)
         for (int row_i = 0; row_i < ROWS - 3; row_i++)
         {
             for (int col_i = 0; col_i < COLUMNS - 3; col_i++)
             {
-                if(boardState[row_i][col_i] && boardState[row_i + 1][col_i + 1] && boardState[row_i + 2][col_i + 2] && boardState[row_i + 3][col_i + 3])
+                // god i love dumb checking
+                if(boardState[row_i][col_i] == charToCheck
+                && boardState[row_i + 1][col_i + 1] == charToCheck
+                && boardState[row_i + 2][col_i + 2] == charToCheck
+                && boardState[row_i + 3][col_i + 3] == charToCheck)
                 {
                     return true;
                 }
@@ -129,7 +134,10 @@ public:
         {
             for (int col_i = COLUMNS; col_i > COLUMNS - 3; col_i--)
             {
-                if(boardState[row_i][col_i] && boardState[row_i + 1][col_i - 1] && boardState[row_i + 2][col_i - 2] && boardState[row_i + 3][col_i - 3])
+                if(boardState[row_i][col_i] == charToCheck
+                && boardState[row_i + 1][col_i - 1] == charToCheck
+                && boardState[row_i + 2][col_i - 2] == charToCheck
+                && boardState[row_i + 3][col_i - 3] == charToCheck)
                 {
                     return true;
                 }
@@ -163,7 +171,6 @@ public:
         }
         std::cout << "+ \n";
     };
-
 };
 
 // init board singleton pointer
@@ -172,10 +179,13 @@ char Board::boardState[ROWS][COLUMNS] {};
 
 int main()
 {
-    int x;
-
-    system("cls");
-    Board::ClearBoard();
-    Board::GetBoard()->RenderBoard();
-    cin >> x;
+    while(true)
+    {
+        // player input holder var
+        char pli;
+        system("cls");
+        Board::ClearBoard();
+        Board::GetBoard()->RenderBoard();
+        cin >> pli;
+    }
 };
