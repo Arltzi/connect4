@@ -37,9 +37,9 @@ public:
     // delete copy constructor
     Board(const Board&) = delete;
 
+    // jsut fills board with empty spaces
     static void ClearBoard()
     {
-        // fills board with empty spaces
         fill(&boardState[0][0], &boardState[0][0] + sizeof(boardState), EMPTY);
     };
 
@@ -62,6 +62,7 @@ public:
         return false;
     };
 
+    // true = player won, false = player hasnt won (not player lost!)
     bool CheckWin(bool p1orp2)
     {
         int checked = 0;
@@ -85,7 +86,7 @@ public:
                     checked = 0;
                 }
             }
-
+            // reset consecutive counter after completing a row
             checked = 0;
         }
 
@@ -107,14 +108,36 @@ public:
                     checked = 0;
                 }
             }
-
+            // reset consecutive counter after completing a column
             checked = 0;
         }
 
+        // check diagonally (down-right)
+        for (int row_i = 0; row_i < ROWS - 3; row_i++)
+        {
+            for (int col_i = 0; col_i < COLUMNS - 3; col_i++)
+            {
+                if(boardState[row_i][col_i] && boardState[row_i + 1][col_i + 1] && boardState[row_i + 2][col_i + 2] && boardState[row_i + 3][col_i + 3])
+                {
+                    return true;
+                }
+            }
+        }
+
         // check diagonally (up-right)
+        for (int row_i = 0; row_i < ROWS - 3; row_i++)
+        {
+            for (int col_i = COLUMNS; col_i > COLUMNS - 3; col_i--)
+            {
+                if(boardState[row_i][col_i] && boardState[row_i + 1][col_i - 1] && boardState[row_i + 2][col_i - 2] && boardState[row_i + 3][col_i - 3])
+                {
+                    return true;
+                }
+            }
+        }
 
-        // check diagonally (up-left)
-
+        // no win found
+        return false;
     };
 
     void RenderBoard()
@@ -143,8 +166,6 @@ public:
 
 };
 
-
-
 // init board singleton pointer
 Board* Board::inst = nullptr;
 char Board::boardState[ROWS][COLUMNS] {};
@@ -156,14 +177,5 @@ int main()
     system("cls");
     Board::ClearBoard();
     Board::GetBoard()->RenderBoard();
-    cin >> x;
-    system("cls");
-    Board::GetBoard()->TryDrop(1, true);
-    Board::GetBoard()->RenderBoard();
-    cin >> x;
-    system("cls");
-    Board::GetBoard()->TryDrop(1, false);
-    Board::GetBoard()->RenderBoard();
-
     cin >> x;
 };
