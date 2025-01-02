@@ -2,6 +2,7 @@
 #include <vector>
 #include <string>
 #include <stdlib.h>
+#include <limits>
 
 using namespace std;
 
@@ -179,13 +180,60 @@ char Board::boardState[ROWS][COLUMNS] {};
 
 int main()
 {
-    while(true)
-    {
-        // player input holder var
-        char pli;
+    bool p1orp2 = true;
+    int col;
+
+    while (true) {
         system("cls");
-        Board::ClearBoard();
         Board::GetBoard()->RenderBoard();
-        cin >> pli;
+
+        if (p1orp2) {
+            std::cout << "Player 1: pick a column (0-6): ";
+        } else {
+            std::cout << "Player 2: pick a column (0-6): ";
+        }
+
+        std::cin >> col;
+
+        // stack overflow snippet "sanity check user input char c++"
+        if (std::cin.fail()) {
+            std::cin.clear(); // clear the error flag
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // discard invalid input
+            continue;
+        }
+
+        if (col < 0 || col >= COLUMNS) {
+            std::cout << "Invalid column. Try again." << '\n';
+            continue;
+        }
+
+        if (!Board::GetBoard()->TryDrop(col, p1orp2)) {
+            std::cout << "Column full. Try again." << '\n';
+            continue;
+        }
+
+        if (Board::GetBoard()->CheckWin(p1orp2)) {
+            system("cls");
+            Board::GetBoard()->RenderBoard();
+            if (p1orp2) {
+                std::cout << "Player 1 (X) wins!" << '\n';
+            } else {
+                std::cout << "Player 2 (O) wins!" << '\n';
+            }
+
+            char playAgain;
+            std::cout << "Do you want to play again? (y/n): ";
+            std::cin >> playAgain;
+            if (playAgain == 'y' || playAgain == 'Y') {
+                Board::GetBoard()->ClearBoard();
+                continue;
+            } else {
+                std::cout << "Thanks for playing!" << '\n';
+                exit(0);
+            }
+            break;
+        }
+
+        p1orp2 = !p1orp2;
     }
 };
